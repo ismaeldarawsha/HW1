@@ -1,6 +1,5 @@
-
 /*
- * *** PLACE YOUR NAME / SECTION  HERE ***
+ * *** Ismael Darawsha, COMP 400 002 SP25 ***
  *
  * Homework # 1 (Programming Assignment). This Java class defines some basic
  * manipulation operations on Linked-Lists and Stacks.
@@ -85,9 +84,18 @@ public class HW1 {
          * The method will invoke the method removeElements for each element
          * found in the linked-list that is less than thr parameter value passed.
          */
+        
         public void removeElementsLT ( int ltValue ) {
+            //Remove all nodes at the beggining of the list that have a value < ltValue
+            while (head != null && head.data < ltValue) {
+                if (current.next.data < ltValue) {
+                    current.next = current.next.next; //Skip the node with value < ltvalue            
+                } else {
+                    current = current.next; //Move to the next node
 
-            // YOUR CODE GOES HERE
+                }
+                }
+            }
 
             return;
         }
@@ -99,8 +107,21 @@ public class HW1 {
          */
 
         public void removeElement ( int value ) {
-
-            // YOUR CODE GOES HERE
+                //Removes all occurences of 'value' at the beginning of the list
+                while (head != null && head.data == value) {
+                    head = head.next; //Move head forward to remove nodes with matching value
+                }
+            //Pointer to traverse and remove occurences from the rest of the list 
+            Node current = head;
+            while (current != null && current.next != null) {
+                if (current.next.data == value) {
+                    current.next = current.next.next; //Remove the node with value 'value'
+                } else {
+                    current = current.next; //Move to the next node
+                    
+                }
+                }
+            }
 
             return;
         }
@@ -158,10 +179,17 @@ public class HW1 {
         public static boolean isPalindrome(String input) {
 
             Stack<Character> stack = new Stack<>();
+            // Convert input to lowercase and remove spaces to make the check case insensitive 
             input = input.toLowerCase().replaceAll("\\s+", "");
-
-            // Your CODE GOES HERE
-            return false;
+            //Push all characters of th eprocessed string onto the srack
+            for(char ch : input.toCharArray()) {
+                if (stack.pop() != ch) { //If mismatch, it's not a palindrome
+                    return false;
+                    
+                }
+            }
+            
+            return true; //If all characters match, it's a palindrome
         }
 
 
@@ -181,9 +209,27 @@ public class HW1 {
          * completed, place them all back in teh original stack.
          */
         public static int findLargestK(Stack<Integer> stack, int k) {
+            Stack<Integer> tempStack = new Stack<>(); //Temporary stack to restore original order
+            int largestIndex = -1; // Track the highest index of k
+            int index = 0; // Current index in the stack
 
-            // YOUR CODE GOES HERE
-            return -1;
+            // Traverse the stack while popping elements
+            while (!stack.isEmpty()) {
+                int val = stack.pop(); // Take top element
+                if (val == k) {
+                    largestIndex = index; //Update largest index when k is found
+                }
+                tempStack.push(val); //Store elements in tempStack to restore later
+                index++;
+            }
+
+            // Restore orginal stack order by pushing elements back
+            while (!tempStack.isEmpty()) {
+                stack.push(tempStack.pop());
+            }
+            
+            
+            return largestIndex; //Return the last found highest index of k
         }
 
     }  // End class Stacks
@@ -201,12 +247,18 @@ public class HW1 {
 
     public static int algorithmAnalysis1(int n, int m) {
         int a = 0, b = 0;
-
+        // First loop runs 'n' times
         for (int i=0; i < n; i++)
-            a+= Math.random();
-
+            a+= Math.random(); //O(M)
+        // Second loop runs 'm' times
         for (int j=0; j < m; j++)
-            b+= Math.random();
+            b+= Math.random(); //O(M)
+    }
+        // Since both loops run separately, the total time complexity is O(N + M),
+        // and since we only use a few integer variables, space complexity is o(1)
+
+        return 3; // O(N + M) time, O(1) space
+    }
 
         /*
          * Select the correct option listed below:
@@ -225,9 +277,20 @@ public class HW1 {
 
     public static int algorithmAnalysis2(int n) {
         int i, j, k = 0;
-        for (i = n/2; i <= n; i++)
-            for ( j = 2; j <= n; j = j*2 )
-                k+= n/2;
+
+        // Outer loop: Runs from n/2 to n (approximately N times)
+        for (i = n/2; i <= n; i++) {
+            
+            // Inner loop: j starts at 2 and doubles each time, running log(N) times
+            for ( j = 2; j <= n; j = j*2 ) {
+                k+= n/2; //Some operation (irrelevant for complexity)
+            }
+        }
+
+            // The outer loop runs O(N) times
+            // The inner loop runs O(log(N)) times for each outer iteration
+            //This results in O(N log N) overall time complexity
+            return 2;
 
         /*
          * Select the correct option listed below:
@@ -240,8 +303,4 @@ public class HW1 {
          */
 
         // RETURN THE CORRECT OPTION LISTED ABOVE
-        return -1;
-    }
-
 }
-
